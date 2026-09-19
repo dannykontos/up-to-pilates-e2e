@@ -1,0 +1,46 @@
+{
+  "name": "up-to-pilates-e2e",
+  "version": "1.0.0",
+  "description": "Playwright E2E test suite for https://uptopilates.ro/",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:smoke": "playwright test --project=chromium tests/smoke",
+    "test:navigation": "playwright test --project=chromium tests/navigation",
+    "test:booking": "playwright test --project=chromium tests/booking",
+    "test:packages": "playwright test --project=chromium tests/packages",
+    "test:contact": "playwright test --project=chromium tests/contact",
+    "test:seo": "playwright test --project=chromium tests/seo",
+    "test:responsive": "playwright test tests/responsive",
+    "test:chromium": "playwright test --project=chromium",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:mobile": "playwright test --project=\"Mobile Chrome\" --project=\"Mobile Safari\"",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen https://uptopilates.ro/",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@types/node": "^22.10.5",
+    "@typescript-eslint/eslint-plugin": "^8.19.1",
+    "@typescript-eslint/parser": "^8.19.1",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-playwright": "^2.2.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.3"
+  }
+}
