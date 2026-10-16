@@ -117,3 +117,14 @@ export function crawlersBlockedByRobots(robotsTxt: string, bots: string[]): stri
   }
   return [...blocked];
 }
+
+/** Absolute links in the page that point to another host, with `&amp;` decoded. */
+export function getExternalLinks(html: string, ownHost: string): string[] {
+  const withoutScripts = html.replace(/<(script|style)[^>]*>[\s\S]*?<\/\1>/gi, '');
+  const hrefs = [...withoutScripts.matchAll(/<a[^>]+href=["'](https?:\/\/[^"']+)["']/gi)].map((m) =>
+    m[1].replace(/&amp;/g, '&'),
+  );
+  return [...new Set(hrefs)].filter(
+    (href) => new URL(href).hostname.replace(/^www\./, '') !== ownHost.replace(/^www\./, ''),
+  );
+}
