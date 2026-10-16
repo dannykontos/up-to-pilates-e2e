@@ -17,3 +17,5 @@ node_modules/
 
 # Logs
 npm-debug.log*
+/lighthouse-report/
+/.lighthouseci/
