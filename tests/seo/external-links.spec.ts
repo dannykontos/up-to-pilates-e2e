@@ -3,12 +3,14 @@ import { criticalPages } from '../../test-data/urls';
 import { fetchHtml, getExternalLinks } from '../../utils/seo';
 
 /**
- * Hosts that answer every request the same way whether the target exists or
- * not (Instagram returns 200 for any profile name, Facebook returns a login
- * wall), so a request can't tell a broken link from a working one. Their
- * links are skipped rather than reported as false passes or false failures.
+ * Hosts whose answer can't tell a broken link from a working one, so their
+ * links are skipped rather than reported as false passes or false failures:
+ * - instagram.com answers 200 for any profile name, even one that doesn't exist;
+ * - facebook.com answers with a login wall;
+ * - cookiedatabase.org (linked from the Complianz cookie banner, not from our
+ *   content) answers 403 to cloud and CI servers such as GitHub's runners.
  */
-const UNVERIFIABLE_HOSTS = ['instagram.com', 'facebook.com'];
+const UNVERIFIABLE_HOSTS = ['instagram.com', 'facebook.com', 'cookiedatabase.org'];
 
 /** Some sites refuse requests that don't look like a browser. */
 const BROWSER_USER_AGENT =
