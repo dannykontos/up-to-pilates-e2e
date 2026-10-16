@@ -5,6 +5,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Daily run against the live site, so a regression introduced from
+  # WordPress (not from this repo) is caught the next morning. 05:00 UTC is
+  # 07:00 in Cluj in winter (08:00 in summer). GitHub emails the person who
+  # last changed this schedule when a scheduled run fails.
+  schedule:
+    - cron: '0 5 * * *'
 
 jobs:
   e2e:
