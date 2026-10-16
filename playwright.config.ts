@@ -1,6 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 import { env } from './utils/env';
 
+/** Specs that only use the `request` fixture and never open a browser page. */
+const HTTP_ONLY_SPECS = ['**/seo/**', '**/performance/**'];
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  *
@@ -32,24 +35,30 @@ export default defineConfig({
     navigationTimeout: 30_000,
   },
 
-  // Responsive specs run only against the mobile projects below; the
-  // desktop projects cover everything else (smoke, navigation, booking,
-  // packages, contact, SEO).
+  // Responsive specs run only against the mobile projects below. SEO and
+  // performance specs only make HTTP requests (no page is rendered), so
+  // they run once on the "http" project instead of once per browser. The
+  // desktop browser projects cover everything else (smoke, navigation,
+  // booking, packages, contact, journal, campaigns).
   projects: [
+    {
+      name: 'http',
+      testMatch: HTTP_ONLY_SPECS,
+    },
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-      testIgnore: '**/responsive/**',
+      testIgnore: ['**/responsive/**', ...HTTP_ONLY_SPECS],
     },
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
-      testIgnore: '**/responsive/**',
+      testIgnore: ['**/responsive/**', ...HTTP_ONLY_SPECS],
     },
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
-      testIgnore: '**/responsive/**',
+      testIgnore: ['**/responsive/**', ...HTTP_ONLY_SPECS],
     },
     {
       name: 'Mobile Chrome',

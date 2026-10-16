@@ -41,9 +41,10 @@ npm run test:journal      # tests/journal only
 npm run test:campaigns    # tests/campaigns only (time-bound promotions)
 npm run test:performance  # tests/performance only (page cache, compression)
 
-npm run test:chromium     # everything, Chromium only
-npm run test:firefox      # everything, Firefox only
-npm run test:webkit       # everything, WebKit only
+npm run test:http         # SEO + performance HTTP checks (no browser)
+npm run test:chromium     # browser tests, Chromium only
+npm run test:firefox      # browser tests, Firefox only
+npm run test:webkit       # browser tests, WebKit only
 npm run test:mobile       # Mobile Chrome + Mobile Safari (responsive tests)
 ```
 
@@ -107,7 +108,9 @@ non-zero exit code.
 
 ```
 .github/workflows/e2e.yml   CI pipeline
-playwright.config.ts        Base URL, projects, reporters, timeouts
+playwright.config.ts        Base URL, projects, reporters, timeouts. SEO and performance
+                            specs only make HTTP requests, so they run once on the "http"
+                            project instead of once per browser
 fixtures/                   Playwright test extended with page-object fixtures
 pages/                      Page Object Model (one class per page/component)
 test-data/                  Routes and fixed test data, separate from test logic
