@@ -15,6 +15,7 @@ test.describe('Smoke', () => {
     const destinations: { key: NavPageKey; path: string }[] = [
       { key: 'reformer', path: routes.ro.reformer },
       { key: 'packages', path: routes.ro.pricing },
+      { key: 'journal', path: routes.ro.journal },
       { key: 'faq', path: routes.ro.faq },
       { key: 'contact', path: routes.ro.contact },
     ];

@@ -37,6 +37,9 @@ npm run test:packages     # tests/packages only
 npm run test:contact      # tests/contact only
 npm run test:seo          # tests/seo only
 npm run test:responsive   # tests/responsive only (mobile projects)
+npm run test:journal      # tests/journal only
+npm run test:campaigns    # tests/campaigns only (time-bound promotions)
+npm run test:performance  # tests/performance only (page cache, compression)
 
 npm run test:chromium     # everything, Chromium only
 npm run test:firefox      # everything, Firefox only
@@ -115,7 +118,12 @@ tests/
   booking/                  Critical booking journey (stops before payment)
   packages/                 Package listing + selection flow (stops before checkout)
   contact/                  Contact form visibility, validation, safe submission
-  seo/                      Canonical/hreflang/robots/JSON-LD/sitemap regressions
+  seo/                      Canonical/hreflang/robots/JSON-LD/sitemap regressions, per-page
+                            on-page basics, and AI visibility (crawler access, llms.txt)
+  journal/                  Journal front page loop, article template and brand punctuation
+  campaigns/                Time-bound promotions (Students Month); browser clock is pinned
+                            so date-based behaviour is tested deterministically
+  performance/              Page cache never applied to booking pages; gzip compression
   responsive/               Mobile-viewport smoke (nav + booking), Mobile Chrome/Safari
 ```
 
