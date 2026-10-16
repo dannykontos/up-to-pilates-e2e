@@ -85,7 +85,13 @@ a capped worker count, and `forbidOnly`.
 
 ## GitHub Actions
 
-`.github/workflows/e2e.yml` runs on every pull request and on pushes to `main`:
+`.github/workflows/e2e.yml` runs on every pull request, on pushes to `main`, on demand
+(Run workflow button), and every day at 05:00 UTC (07:00 in Cluj in winter). The daily run
+catches regressions introduced on the WordPress side, where no pull request is involved;
+GitHub emails the person who last changed the schedule when it fails. Scheduled runs are
+paused automatically after 60 days without repository activity.
+
+Each run:
 
 1. Checks out the repo and sets up Node.js 22 with npm caching.
 2. `npm ci`
