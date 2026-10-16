@@ -1,0 +1,34 @@
+name: Lighthouse
+
+on:
+  pull_request:
+  workflow_dispatch:
+  # Daily, half an hour after the E2E run, so the two don't load the shared
+  # host at the same time.
+  schedule:
+    - cron: '30 5 * * *'
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run Lighthouse CI (mobile, median of 3 runs per page)
+        run: npx --yes @lhci/cli@0.15.1 autorun --config=lighthouserc.json
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: lighthouse-report/
+          retention-days: 14

@@ -110,6 +110,29 @@ Each run:
 The job fails the workflow whenever any test fails - there is nothing that swallows a
 non-zero exit code.
 
+## Lighthouse (performance budgets)
+
+`.github/workflows/lighthouse.yml` runs [Lighthouse CI](https://github.com/GoogleChrome/lighthouse-ci)
+on pull requests, on demand, and daily at 05:30 UTC (half an hour after the E2E run). It audits six key
+pages on the default mobile profile, three runs each, and asserts on the median run
+(`lighthouserc.json`):
+
+| Check                    | Budget    | Level |
+| ------------------------ | --------- | ----- |
+| Performance score        | >= 60     | error |
+| Accessibility score      | >= 90     | error |
+| Best practices score     | >= 90     | error |
+| SEO score                | >= 95     | error |
+| Cumulative Layout Shift  | <= 0.1    | error |
+| Total Blocking Time      | <= 600 ms | error |
+| Largest Contentful Paint | <= 4 s    | warn  |
+
+The performance floor is deliberately below today's scores (80-93) because lab scores vary by a
+few points between runs; it catches real regressions (a heavy plugin, an unoptimised hero image),
+not noise. The booking page is left out: the Amelia widget is rendered live on every request by
+design. Run it locally with `npx @lhci/cli@0.15.1 autorun --config=lighthouserc.json`; the HTML
+reports land in `lighthouse-report/` (also uploaded as a workflow artifact).
+
 ## Project structure
 
 ```

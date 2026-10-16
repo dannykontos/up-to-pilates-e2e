@@ -1,0 +1,35 @@
+{
+  "ci": {
+    "collect": {
+      "url": [
+        "https://uptopilates.ro/",
+        "https://uptopilates.ro/en/",
+        "https://uptopilates.ro/preturi/",
+        "https://uptopilates.ro/contact-cluj/",
+        "https://uptopilates.ro/en/journal/",
+        "https://uptopilates.ro/en/journal/exam-season-cluj/"
+      ],
+      "numberOfRuns": 3,
+      "settings": {
+        "onlyCategories": ["performance", "accessibility", "best-practices", "seo"],
+        "chromeFlags": "--headless=new --no-sandbox"
+      }
+    },
+    "assert": {
+      "aggregationMethod": "median-run",
+      "assertions": {
+        "categories:performance": ["error", { "minScore": 0.6 }],
+        "categories:accessibility": ["error", { "minScore": 0.9 }],
+        "categories:best-practices": ["error", { "minScore": 0.9 }],
+        "categories:seo": ["error", { "minScore": 0.95 }],
+        "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }],
+        "total-blocking-time": ["error", { "maxNumericValue": 600 }],
+        "largest-contentful-paint": ["warn", { "maxNumericValue": 4000 }]
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": "lighthouse-report"
+    }
+  }
+}
