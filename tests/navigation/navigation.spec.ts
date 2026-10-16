@@ -1,13 +1,9 @@
 import { test, expect } from '../../fixtures/pages.fixture';
-import { criticalPages, translatedPagePairs, routes } from '../../test-data/urls';
+import { translatedPagePairs, routes } from '../../test-data/urls';
 
 test.describe('Navigation', () => {
-  for (const { name, path } of criticalPages) {
-    test(`internal link resolves without redirect: ${name}`, async ({ request }) => {
-      const response = await request.get(path, { maxRedirects: 0 });
-      expect(response.status(), `${name} (${path}) should respond 200 with no redirect`).toBe(200);
-    });
-  }
+  // "Every critical page answers 200 without a redirect" lives in
+  // tests/seo/seo-technical.spec.ts and runs once, on the http project.
 
   for (const { name, ro, en } of translatedPagePairs) {
     test(`language switcher links ${name} RO -> EN and back`, async ({ page, languageSwitcher }) => {
