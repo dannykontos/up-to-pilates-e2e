@@ -1,5 +1,14 @@
 import { test as base } from '@playwright/test';
-import { HomePage, Navigation, LanguageSwitcher, BookingPage, PackagesPage, ContactPage, ReformerPage } from '../pages';
+import {
+  HomePage,
+  Navigation,
+  LanguageSwitcher,
+  BookingPage,
+  PackagesPage,
+  ContactPage,
+  ReformerPage,
+  JournalPage,
+} from '../pages';
 
 type PageFixtures = {
   homePage: HomePage;
@@ -9,6 +18,7 @@ type PageFixtures = {
   packagesPage: PackagesPage;
   contactPage: ContactPage;
   reformerPage: ReformerPage;
+  journalPage: JournalPage;
 };
 
 /**
@@ -37,6 +47,9 @@ export const test = base.extend<PageFixtures>({
   },
   reformerPage: async ({ page }, use) => {
     await use(new ReformerPage(page));
+  },
+  journalPage: async ({ page }, use) => {
+    await use(new JournalPage(page));
   },
 });
 

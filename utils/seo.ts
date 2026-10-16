@@ -36,6 +36,31 @@ export function getRobotsMeta(html: string): string | null {
   return content ? content[1] : null;
 }
 
+export function getTitle(html: string): string | null {
+  const match = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  return match ? decodeEntities(match[1].trim()) : null;
+}
+
+export function getMetaDescription(html: string): string | null {
+  const match = html.match(/<meta[^>]+name=["']description["'][^>]*>/i);
+  if (!match) return null;
+  const content = match[0].match(/content=["']([^"']*)["']/i);
+  return content ? decodeEntities(content[1]) : null;
+}
+
+export function countH1(html: string): number {
+  return (html.match(/<h1[\s>]/gi) || []).length;
+}
+
+/** Just enough entity decoding for titles and descriptions (WordPress encodes `&`, quotes and dashes). */
+function decodeEntities(text: string): string {
+  return text
+    .replace(/&#(\d+);/g, (_, code: string) => String.fromCharCode(Number(code)))
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;|&apos;/g, "'");
+}
+
 export function getJsonLdBlocks(html: string): Record<string, unknown>[] {
   const scripts = html.match(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi) || [];
   const blocks: Record<string, unknown>[] = [];
@@ -77,4 +102,18 @@ export function collectSchemaTypes(blocks: Record<string, unknown>[]): string[] 
 
   visit(blocks);
   return types;
+}
+
+/**
+ * Returns the crawlers (from `bots`) that robots.txt shuts out of the whole
+ * site, either through their own User-agent group or through `User-agent: *`.
+ */
+export function crawlersBlockedByRobots(robotsTxt: string, bots: string[]): string[] {
+  const blocked = new Set<string>();
+  for (const group of robotsTxt.split(/\n(?=\s*User-agent:)/i)) {
+    if (!/^\s*Disallow:\s*\/\s*$/im.test(group)) continue;
+    const agents = [...group.matchAll(/User-agent:\s*(\S+)/gi)].map((m) => m[1].toLowerCase());
+    bots.filter((bot) => agents.includes('*') || agents.includes(bot.toLowerCase())).forEach((bot) => blocked.add(bot));
+  }
+  return [...blocked];
 }
