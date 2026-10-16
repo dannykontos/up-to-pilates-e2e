@@ -4,6 +4,9 @@ import { env } from './utils/env';
 /** Specs that only use the `request` fixture and never open a browser page. */
 const HTTP_ONLY_SPECS = ['**/seo/**', '**/performance/**'];
 
+/** Specs whose result does not depend on the browser engine, so Chromium alone is enough. */
+const CHROMIUM_ONLY_SPECS = ['**/accessibility/**'];
+
 /**
  * See https://playwright.dev/docs/test-configuration.
  *
@@ -53,12 +56,12 @@ export default defineConfig({
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
-      testIgnore: ['**/responsive/**', ...HTTP_ONLY_SPECS],
+      testIgnore: ['**/responsive/**', ...HTTP_ONLY_SPECS, ...CHROMIUM_ONLY_SPECS],
     },
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
-      testIgnore: ['**/responsive/**', ...HTTP_ONLY_SPECS],
+      testIgnore: ['**/responsive/**', ...HTTP_ONLY_SPECS, ...CHROMIUM_ONLY_SPECS],
     },
     {
       name: 'Mobile Chrome',

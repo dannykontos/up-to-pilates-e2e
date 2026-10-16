@@ -40,6 +40,7 @@ npm run test:responsive   # tests/responsive only (mobile projects)
 npm run test:journal      # tests/journal only
 npm run test:campaigns    # tests/campaigns only (time-bound promotions)
 npm run test:performance  # tests/performance only (page cache, compression)
+npm run test:accessibility # tests/accessibility only (axe-core, WCAG 2.1 AA, Chromium)
 
 npm run test:http         # SEO + performance HTTP checks (no browser)
 npm run test:chromium     # browser tests, Chromium only
@@ -133,6 +134,8 @@ tests/
   campaigns/                Time-bound promotions (Students Month); browser clock is pinned
                             so date-based behaviour is tested deterministically
   performance/              Page cache never applied to booking pages; gzip compression
+  accessibility/            axe-core WCAG 2.1 AA scan of key pages; known site-wide issues
+                            are listed in the spec and excluded, anything new fails
   responsive/               Mobile-viewport smoke (nav + booking), Mobile Chrome/Safari
 ```
 

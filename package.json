@@ -21,6 +21,7 @@
     "test:seo": "playwright test --project=http tests/seo",
     "test:journal": "playwright test --project=chromium tests/journal",
     "test:campaigns": "playwright test --project=chromium tests/campaigns",
+    "test:accessibility": "playwright test --project=chromium tests/accessibility",
     "test:performance": "playwright test --project=http tests/performance",
     "test:responsive": "playwright test tests/responsive",
     "test:http": "playwright test --project=http",
@@ -37,6 +38,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "^1.55.0",
     "@types/node": "^22.10.5",
     "@typescript-eslint/eslint-plugin": "^8.19.1",
