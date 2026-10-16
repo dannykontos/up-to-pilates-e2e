@@ -8,13 +8,14 @@ const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 /**
  * Known site-wide issues, excluded so the suite fails only on new problems.
  * Each one is a follow-up, not an accepted state:
- * - color-contrast: the brand orange and teal labels on the eggshell
- *   background sit below the 4.5:1 ratio. Fixing it means darker shades of
- *   the palette, which is a design decision.
- * - label-content-name-mismatch: the header logo and language switcher have
- *   aria-labels ("Up To Pilates homepage", "Switch language") that do not
- *   contain their visible text, which confuses voice-control users. Fixable
- *   in the header HTML.
+ * - color-contrast: brand orange #E07A5F (2.6:1) and teal #81B29A (2.1:1)
+ *   on the eggshell #F4F1DE background, plus the small grey uppercase labels
+ *   (2.3-4.2:1), sit below WCAG AA (4.5:1 for text, 3:1 for large headings).
+ *   Fixing it means darker shades of the palette, which is a design decision.
+ * - label-content-name-mismatch: aria-labels that don't contain the visible
+ *   text, which breaks voice control ("click up to Pilates"): the header
+ *   logo and language switcher, the service and package cards on the home
+ *   and pricing pages, and the "Buy package" buttons.
  */
 const KNOWN_ISSUES = ['color-contrast', 'label-content-name-mismatch'];
 
