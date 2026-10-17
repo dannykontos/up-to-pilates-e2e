@@ -9,7 +9,7 @@ explicitly opt in against a non-production environment.
 
 ## At a glance
 
-**140 checks** guard the live site, from "does every page load" to "would ChatGPT be able to
+**169 checks** guard the live site, from "does every page load" to "would ChatGPT be able to
 read this page". A full run takes **about 6 minutes** on GitHub Actions and runs **every
 morning**, so a problem introduced in WordPress (where no code review happens) is caught
 the next day.
@@ -23,7 +23,7 @@ the next day.
 | Contact        | The form, its required fields and its validation (nothing is sent)                              |       4 | Chrome, Firefox, Safari                |
 | Journal        | Article cards per language, live links, brand punctuation, one title per article                |      18 | Chrome, Firefox, Safari                |
 | Campaigns      | Students Month: the header bar shows in October and disappears on 1 November                    |      10 | Chrome, Firefox, Safari                |
-| Mobile         | Mobile menu and booking on small screens                                                        |       2 | iPhone 14, Pixel 7                     |
+| Mobile         | No page scrolls sideways; menu, Book button and language switch; Journal cards and articles     |      31 | iPhone 14, Pixel 7                     |
 | Accessibility  | No new WCAG 2.1 AA problems on 11 key pages (axe-core)                                          |      11 | Chrome                                 |
 | SEO            | Titles, descriptions, canonicals, hreflang, structured data, sitemap, robots.txt                |      60 | HTTP only                              |
 | AI visibility  | AI crawlers (ChatGPT, Claude, Perplexity, Bing) can read the site; `llms.txt` works             |       9 | HTTP only                              |
@@ -214,7 +214,8 @@ tests/
   performance/              Page cache never applied to booking pages; gzip compression
   accessibility/            axe-core WCAG 2.1 AA scan of key pages; known site-wide issues
                             are listed in the spec and excluded, anything new fails
-  responsive/               Mobile-viewport smoke (nav + booking), Mobile Chrome/Safari
+  responsive/               Mobile Chrome/Safari: nav + booking smoke, no sideways scroll on
+                            any key page, header controls, Journal layout on a phone
 ```
 
 ### Why this structure
