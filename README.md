@@ -7,6 +7,61 @@ is deliberately conservative: it never completes a real payment, never lets a pa
 purchase reach checkout, and never sends a real contact-form submission unless you
 explicitly opt in against a non-production environment.
 
+## At a glance
+
+**140 checks** guard the live site, from "does every page load" to "would ChatGPT be able to
+read this page". A full run takes **about 6 minutes** on GitHub Actions and runs **every
+morning**, so a problem introduced in WordPress (where no code review happens) is caught
+the next day.
+
+| Area           | What it protects                                                                                |  Checks | Runs on                                |
+| -------------- | ----------------------------------------------------------------------------------------------- | ------: | -------------------------------------- |
+| Smoke          | Every key page loads; the menu reaches every section; RO/EN switching                           |       8 | Chrome, Firefox, Safari                |
+| Navigation     | The language switcher lands on the right translation for 7 page pairs; the header "Book" button |       8 | Chrome, Firefox, Safari                |
+| Booking        | A visitor can pick a service, date and time and reach the summary (stops before payment)        |       1 | Chrome, Firefox, Safari, iPhone, Pixel |
+| Packages       | Packages and prices load; choosing one moves the flow forward (stops before checkout)           |       3 | Chrome, Firefox, Safari                |
+| Contact        | The form, its required fields and its validation (nothing is sent)                              |       4 | Chrome, Firefox, Safari                |
+| Journal        | Article cards per language, live links, brand punctuation, one title per article                |      18 | Chrome, Firefox, Safari                |
+| Campaigns      | Students Month: the header bar shows in October and disappears on 1 November                    |      10 | Chrome, Firefox, Safari                |
+| Mobile         | Mobile menu and booking on small screens                                                        |       2 | iPhone 14, Pixel 7                     |
+| Accessibility  | No new WCAG 2.1 AA problems on 11 key pages (axe-core)                                          |      11 | Chrome                                 |
+| SEO            | Titles, descriptions, canonicals, hreflang, structured data, sitemap, robots.txt                |      60 | HTTP only                              |
+| AI visibility  | AI crawlers (ChatGPT, Claude, Perplexity, Bing) can read the site; `llms.txt` works             |       9 | HTTP only                              |
+| External links | Links to Burn, Google Maps, gyms and running clubs still work                                   |       1 | HTTP only                              |
+| Caching        | Booking pages are never cached; pages are served compressed                                     |       5 | HTTP only                              |
+| Lighthouse     | Performance, accessibility, best-practice and SEO scores stay above set budgets                 | 6 pages | Chrome (mobile)                        |
+
+### When it runs and how long it takes
+
+| Trigger                           | What runs                                               | Time                         |
+| --------------------------------- | ------------------------------------------------------- | ---------------------------- |
+| Every pull request                | Full E2E suite + Lighthouse                             | ~6 min + ~4 min, in parallel |
+| Every morning (05:00 / 05:30 UTC) | Full E2E suite, then Lighthouse                         | ~6 min, ~4 min               |
+| On demand ("Run workflow")        | Either workflow                                         | same                         |
+| Locally, Chromium + HTTP checks   | `npx playwright test --project=http --project=chromium` | under 1 min                  |
+
+A failed scheduled run sends an email, and every run keeps an HTML report (with traces,
+screenshots and videos for failures) as a downloadable artifact for 14 days.
+
+### Built to be gentle with a live site
+
+The suite tests production, a small studio's site on shared hosting, so it is designed to
+check a lot while asking little of the server:
+
+- **Checks that only read HTML run once, not once per browser.** SEO, AI visibility, links
+  and caching use plain HTTP requests on a dedicated `http` project. This cut a full run from
+  445 to 246 tests with the same coverage.
+- **Browser-independent checks run on one browser.** Accessibility results don't depend on
+  the engine, so they run on Chrome only.
+- **The daily E2E run and Lighthouse are 30 minutes apart**, so they never load the host at
+  the same time.
+- **Nothing is ever bought, booked or sent.** See [Safety boundaries](#safety-boundaries-production-website).
+- **Time-based behaviour is tested without waiting for the date.** Campaign tests set the
+  browser clock, so "the banner disappears on 1 November" is checked today.
+- **Flaky-by-nature sources are handled on purpose.** Hosts that can't be verified by a
+  request (Instagram, Facebook, bot-protected sites) are skipped with a reason, and known
+  site-wide accessibility issues are listed explicitly so only new ones fail the build.
+
 ## Prerequisites
 
 - Node.js 20+ (LTS)
@@ -237,10 +292,16 @@ deliberately scoped to stop short of anything destructive:
   `ENABLE_CONTACT_SUBMISSION=true` is set - point `BASE_URL` at a staging site before
   enabling it, since a real run against production emails the business.
 
-## A known finding from building this suite
+## What the suite has caught so far
 
-While building the SEO checks, `tests/seo/seo-technical.spec.ts` surfaced a real
-production issue: `robots.txt` declares
-`Sitemap: https://uptopilates.ro/sitemap_index.xml`, but that URL currently returns
-`404`. The test correctly fails until that's fixed on the site - this is intentional,
-not a bug in the framework.
+Real issues on the live site, found by these tests rather than by visitors:
+
+- **Missing sitemap.** `robots.txt` pointed to a sitemap that returned `404`. Fixed on the site.
+- **Journal articles falling back to the theme template.** An update from the classic
+  WordPress editor brought back a second page title and an extra author/date bar on all four
+  articles. Fixed, and now guarded by `tests/journal`.
+- **An insecure outbound link.** The Running Clubs article linked to `http://` instead of
+  `https://`. Fixed.
+- **Accessibility.** Brand orange and teal text sits below the WCAG contrast ratio, and some
+  links have hidden labels that don't match their visible text. Tracked as known issues in
+  `tests/accessibility` until the design is updated.
