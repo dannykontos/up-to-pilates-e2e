@@ -1,4 +1,4 @@
-import type { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { routes } from '../test-data/urls';
 
@@ -45,12 +45,19 @@ export class BookingPage extends BasePage {
     return this.widget.getByRole('button', { name: 'Continuă' });
   }
 
+  /**
+   * Bookable days from today on. Past days are excluded explicitly: right after
+   * the calendar renders, Amelia briefly shows every cell as enabled until the
+   * availability request returns, so ":not(disabled)" alone can match a past day.
+   */
   private get availableCalendarDays() {
-    return this.page.locator('.am-advsc__dayGridMonth-cell:not(.am-advsc__dayGridMonth-disabled)');
+    return this.widget.locator(
+      '.am-advsc__dayGridMonth-cell:is(.fc-day-today, .fc-day-future):not(.am-advsc__dayGridMonth-disabled)',
+    );
   }
 
   private get timeSlots() {
-    return this.page.locator('.am-advsc__slots-item');
+    return this.widget.locator('.am-advsc__slots-item');
   }
 
   /** Labels of the steps shown in the left-hand stepper, in order. */
@@ -83,10 +90,16 @@ export class BookingPage extends BasePage {
     }
   }
 
+  /**
+   * Clicks the first bookable day until its time slots show up. On slow runs
+   * (seen on WebKit in CI) a click that lands while availability is still
+   * loading is ignored, so a single click is not enough.
+   */
   async selectFirstAvailableDate(): Promise<void> {
-    const day = this.availableCalendarDays.first();
-    await day.waitFor({ state: 'visible', timeout: 15000 });
-    await day.click();
+    await expect(async () => {
+      await this.availableCalendarDays.first().click({ timeout: 5000 });
+      await expect(this.timeSlots.first()).toBeVisible({ timeout: 5000 });
+    }).toPass({ timeout: 45000 });
   }
 
   async selectFirstAvailableTimeSlot(): Promise<void> {
