@@ -2,23 +2,47 @@ import { expect, type Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { routes } from '../test-data/urls';
 
+type BookingLanguage = 'ro' | 'en';
+
+/** Amelia labels per site language; only the strings the flow relies on. */
+const labels = {
+  ro: {
+    serviceCombobox: 'Selectați ședința',
+    skipPackages: /Omiteți pachetele/i,
+    continue: 'Continuă',
+  },
+  en: {
+    serviceCombobox: 'Select Service',
+    skipPackages: /Skip packages/i,
+    continue: 'Continue',
+  },
+} as const;
+
 /**
  * The Reformer booking flow (Amelia booking plugin, "full step" layout).
  *
+ * Works on both the RO (/rezervare/) and EN (/en/book/) booking pages.
+ *
  * Safety boundary: this page object deliberately stops at the "Datele
- * dumneavoastră" (your details) step, once the booking summary and the
+ * dumneavoastră" / "Your Information" (your details) step, once the booking summary and the
  * upcoming "Plată" (payment) step are visible in the stepper. It never
  * fills in customer details or advances into the payment step, so the
  * suite can never create a real appointment or trigger a real charge
  * against the production Amelia/Stripe integration.
  */
 export class BookingPage extends BasePage {
-  constructor(page: Page) {
+  private readonly text: (typeof labels)[BookingLanguage];
+
+  constructor(
+    page: Page,
+    private readonly language: BookingLanguage = 'ro',
+  ) {
     super(page);
+    this.text = labels[language];
   }
 
   async open(): Promise<void> {
-    await this.goto(routes.ro.booking);
+    await this.goto(routes[this.language].booking);
   }
 
   get widget() {
@@ -30,7 +54,7 @@ export class BookingPage extends BasePage {
   }
 
   get serviceCombobox() {
-    return this.page.getByRole('combobox', { name: 'Selectați ședința' });
+    return this.page.getByRole('combobox', { name: this.text.serviceCombobox });
   }
 
   get serviceOptions() {
@@ -38,11 +62,11 @@ export class BookingPage extends BasePage {
   }
 
   private get skipPackagesButton() {
-    return this.widget.getByRole('button', { name: /Omiteți pachetele/i });
+    return this.widget.getByRole('button', { name: this.text.skipPackages });
   }
 
   private get continueButton() {
-    return this.widget.getByRole('button', { name: 'Continuă' });
+    return this.widget.getByRole('button', { name: this.text.continue });
   }
 
   /**
