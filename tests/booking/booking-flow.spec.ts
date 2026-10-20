@@ -37,4 +37,42 @@ test.describe('Booking flow', () => {
     // e.g. "septembrie 21, 2026 - 08:00"
     await expect(bookingPage.stepperSelections.nth(1)).toContainText(/\d{4}.*\d{2}:\d{2}/);
   });
+
+  test('an English-speaking visitor can book through /en/book/ up to the booking summary', async ({
+    bookingPageEn,
+  }) => {
+    await bookingPageEn.open();
+    await expect(bookingPageEn.widget).toBeVisible();
+
+    await bookingPageEn.completeUpToBookingSummary();
+
+    await expect(bookingPageEn.currentStepTitle).toHaveText('Your Information');
+
+    await expect(bookingPageEn.stepperSteps).toHaveText([
+      'Service Selection',
+      'Date & Time',
+      'Your Information',
+      'Payments',
+    ]);
+
+    await expect(bookingPageEn.stepperSelections.nth(0)).toContainText(/Pilates Reformer/i);
+    // e.g. "October 21, 2026 - 08:00"
+    await expect(bookingPageEn.stepperSelections.nth(1)).toContainText(/[A-Z][a-z]+ \d{1,2}, \d{4} - \d{2}:\d{2}/);
+  });
+
+  test('English service names contain no Romanian words', async ({ bookingPageEn }) => {
+    // Known issue: Amelia shows the RO service names on /en/book/
+    // (e.g. "Pilates Reformer | 1 Ședință"). When the Amelia translations are
+    // added, this test starts passing and Playwright flags it: remove test.fail().
+    test.fail();
+
+    await bookingPageEn.open();
+    await bookingPageEn.serviceCombobox.click();
+    const names = await bookingPageEn.serviceOptions.allInnerTexts();
+
+    expect(names.length).toBeGreaterThan(0);
+    for (const name of names) {
+      expect(name, `service "${name}"`).not.toMatch(/Ședinț|Sedint/i);
+    }
+  });
 });

@@ -15,6 +15,7 @@ type PageFixtures = {
   navigation: Navigation;
   languageSwitcher: LanguageSwitcher;
   bookingPage: BookingPage;
+  bookingPageEn: BookingPage;
   packagesPage: PackagesPage;
   contactPage: ContactPage;
   reformerPage: ReformerPage;
@@ -38,6 +39,9 @@ export const test = base.extend<PageFixtures>({
   },
   bookingPage: async ({ page }, use) => {
     await use(new BookingPage(page));
+  },
+  bookingPageEn: async ({ page }, use) => {
+    await use(new BookingPage(page, 'en'));
   },
   packagesPage: async ({ page }, use) => {
     await use(new PackagesPage(page));

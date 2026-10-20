@@ -18,7 +18,7 @@ the next day.
 | -------------- | ----------------------------------------------------------------------------------------------- | ------: | -------------------------------------- |
 | Smoke          | Every key page loads; the menu reaches every section; RO/EN switching                           |       8 | Chrome, Firefox, Safari                |
 | Navigation     | The language switcher lands on the right translation for 7 page pairs; the header "Book" button |       8 | Chrome, Firefox, Safari                |
-| Booking        | A visitor can pick a service, date and time and reach the summary (stops before payment)        |       1 | Chrome, Firefox, Safari, iPhone, Pixel |
+| Booking        | RO + EN visitors pick a service, date and time and reach the summary (stops before payment)     |       3 | Chrome, Firefox, Safari, iPhone, Pixel |
 | Packages       | Packages and prices load; choosing one moves the flow forward (stops before checkout)           |       3 | Chrome, Firefox, Safari                |
 | Contact        | The form, its required fields and its validation (nothing is sent)                              |       4 | Chrome, Firefox, Safari                |
 | Journal        | Article cards per language, live links, brand punctuation, one title per article                |      18 | Chrome, Firefox, Safari                |
@@ -280,9 +280,9 @@ This suite runs against a real business's production site, so several tests are
 deliberately scoped to stop short of anything destructive:
 
 - **Booking flow** (`tests/booking/booking-flow.spec.ts`): drives the Amelia widget
-  through service → date → time selection and stops as soon as the "Datele
-  dumneavoastră" (your details) step and the "Plată" (payment) step are visible in the
-  stepper. It never fills in personal details or proceeds into payment, so no real
+  through service → date → time selection, on both /rezervare/ and /en/book/, and stops
+  as soon as the "Datele dumneavoastră" / "Your Information" (your details) step and the
+  "Plată" / "Payments" step are visible in the stepper. It never fills in personal details or proceeds into payment, so no real
   appointment or Stripe charge is ever created.
 - **Packages flow** (`tests/packages/packages.spec.ts`): selects a package and confirms
   the flow advances past the selection screen, then stops - it never reaches checkout,
