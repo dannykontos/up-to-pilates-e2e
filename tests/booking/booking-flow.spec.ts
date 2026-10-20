@@ -38,7 +38,9 @@ test.describe('Booking flow', () => {
     await expect(bookingPage.stepperSelections.nth(1)).toContainText(/\d{4}.*\d{2}:\d{2}/);
   });
 
-  test('an English-speaking visitor can book through /en/book/ up to the booking summary', async ({ bookingPageEn }) => {
+  test('an English-speaking visitor can book through /en/book/ up to the booking summary', async ({
+    bookingPageEn,
+  }) => {
     await bookingPageEn.open();
     await expect(bookingPageEn.widget).toBeVisible();
 
