@@ -8,6 +8,7 @@ import {
   ContactPage,
   ReformerPage,
   JournalPage,
+  FaqPage,
 } from '../pages';
 
 type PageFixtures = {
@@ -20,6 +21,7 @@ type PageFixtures = {
   contactPage: ContactPage;
   reformerPage: ReformerPage;
   journalPage: JournalPage;
+  faqPage: FaqPage;
 };
 
 /**
@@ -54,6 +56,9 @@ export const test = base.extend<PageFixtures>({
   },
   journalPage: async ({ page }, use) => {
     await use(new JournalPage(page));
+  },
+  faqPage: async ({ page }, use) => {
+    await use(new FaqPage(page));
   },
 });
 
