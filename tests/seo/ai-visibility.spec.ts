@@ -42,10 +42,13 @@ test.describe('AI visibility', () => {
     const links = [...new Set([...body.matchAll(/\]\((https?:\/\/[^)]+)\)/g)].map((m) => m[1]))];
     expect(links.length).toBeGreaterThan(0);
 
-    const results = await Promise.all(
-      links.map(async (link) => ({ link, status: (await request.get(link, { maxRedirects: 0 })).status() })),
-    );
-    const broken = results.filter(({ status }) => status !== 200).map(({ link, status }) => `${status} ${link}`);
+    // One request at a time: firing them all at once gets throttled by the
+    // site firewall and shows up as timeouts instead of real broken links.
+    const broken: string[] = [];
+    for (const link of links) {
+      const status = (await request.get(link, { maxRedirects: 0 })).status();
+      if (status !== 200) broken.push(`${status} ${link}`);
+    }
     expect(broken, 'llms.txt links that redirect or fail').toEqual([]);
   });
 });

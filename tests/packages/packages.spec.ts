@@ -34,7 +34,8 @@ test.describe('Packages', () => {
 
   test('package booking page is reachable from the pricing page CTA', async ({ page }) => {
     await page.goto(routes.ro.pricing);
-    const packageCta = page.locator(`a[href="${routes.ro.packagesBooking}"]`).first();
+    // The V4 pricing page links with absolute URLs, the old one with relative paths.
+    const packageCta = page.locator(`a[href$="${routes.ro.packagesBooking}"]`).first();
     await expect(packageCta).toBeVisible();
     await packageCta.click();
     await expect(page).toHaveURL(new RegExp(`${routes.ro.packagesBooking}$`));
