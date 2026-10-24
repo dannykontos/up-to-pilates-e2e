@@ -44,11 +44,11 @@ test.describe('AI visibility', () => {
 
     // One request at a time: firing them all at once gets throttled by the
     // site firewall and shows up as timeouts instead of real broken links.
-    const broken: string[] = [];
+    const results: { link: string; status: number }[] = [];
     for (const link of links) {
-      const status = (await request.get(link, { maxRedirects: 0 })).status();
-      if (status !== 200) broken.push(`${status} ${link}`);
+      results.push({ link, status: (await request.get(link, { maxRedirects: 0 })).status() });
     }
+    const broken = results.filter(({ status }) => status !== 200).map(({ link, status }) => `${status} ${link}`);
     expect(broken, 'llms.txt links that redirect or fail').toEqual([]);
   });
 });
