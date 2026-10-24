@@ -22,6 +22,7 @@ the next day.
 | Packages       | Packages and prices load; choosing one moves the flow forward (stops before checkout)           |       3 | Chrome, Firefox, Safari                |
 | Contact        | The form, its required fields and its validation (nothing is sent)                              |       4 | Chrome, Firefox, Safari                |
 | Journal        | Article cards per language, live links, brand punctuation, one title per article                |      18 | Chrome, Firefox, Safari                |
+| FAQ            | All 20 questions per language, one FAQPage schema matching them, one icon per question          |       6 | Chrome, Firefox, Safari                |
 | Campaigns      | Students Month: the header bar shows in October and disappears on 1 November                    |      10 | Chrome, Firefox, Safari                |
 | Mobile         | No page scrolls sideways; menu, Book button and language switch; Journal cards and articles     |      31 | iPhone 14, Pixel 7                     |
 | Accessibility  | No new WCAG 2.1 AA problems on 11 key pages (axe-core)                                          |      11 | Chrome                                 |
@@ -93,6 +94,7 @@ npm run test:contact      # tests/contact only
 npm run test:seo          # tests/seo only
 npm run test:responsive   # tests/responsive only (mobile projects)
 npm run test:journal      # tests/journal only
+npm run test:faq          # tests/faq only
 npm run test:campaigns    # tests/campaigns only (time-bound promotions)
 npm run test:performance  # tests/performance only (page cache, compression)
 npm run test:accessibility # tests/accessibility only (axe-core, WCAG 2.1 AA, Chromium)
@@ -209,6 +211,8 @@ tests/
   seo/                      Canonical/hreflang/robots/JSON-LD/sitemap regressions, per-page
                             on-page basics, and AI visibility (crawler access, llms.txt)
   journal/                  Journal front page loop, article template and brand punctuation
+  faq/                      FAQ accordion: question count, one FAQPage schema in step with the
+                            visible questions, a single open/closed icon per question
   campaigns/                Time-bound promotions (Students Month); browser clock is pinned
                             so date-based behaviour is tested deterministically
   performance/              Page cache never applied to booking pages; gzip compression

@@ -7,3 +7,4 @@ export { PackagesPage } from './PackagesPage';
 export { ContactPage } from './ContactPage';
 export { ReformerPage } from './ReformerPage';
 export { JournalPage } from './JournalPage';
+export { FaqPage } from './FaqPage';
