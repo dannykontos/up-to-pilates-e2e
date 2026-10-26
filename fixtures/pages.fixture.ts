@@ -3,6 +3,7 @@ import {
   HomePage,
   Navigation,
   LanguageSwitcher,
+  Footer,
   BookingPage,
   PackagesPage,
   ContactPage,
@@ -15,6 +16,7 @@ type PageFixtures = {
   homePage: HomePage;
   navigation: Navigation;
   languageSwitcher: LanguageSwitcher;
+  footer: Footer;
   bookingPage: BookingPage;
   bookingPageEn: BookingPage;
   packagesPage: PackagesPage;
@@ -38,6 +40,9 @@ export const test = base.extend<PageFixtures>({
   },
   languageSwitcher: async ({ page }, use) => {
     await use(new LanguageSwitcher(page));
+  },
+  footer: async ({ page }, use) => {
+    await use(new Footer(page));
   },
   bookingPage: async ({ page }, use) => {
     await use(new BookingPage(page));

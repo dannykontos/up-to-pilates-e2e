@@ -15,6 +15,9 @@ export const routes = {
     journal: '/jurnal/',
     studentsMonth: '/pilates-pentru-studenti-cluj/',
     articleExamSeason: '/journal/sesiunea-cluj-studenti/',
+    privacy: '/politica-de-confidentialitate/',
+    terms: '/termeni-si-conditii/',
+    cookies: '/politica-cookie/',
   },
   en: {
     home: '/en/',
@@ -29,6 +32,9 @@ export const routes = {
     articleExamSeason: '/en/journal/exam-season-cluj/',
     articleRunningClubs: '/en/journal/running-clubs-cluj/',
     articleFitnessExpats: '/en/journal/fitness-in-cluj-for-expats-erasmus-students/',
+    privacy: '/en/privacy-policy/',
+    terms: '/en/terms/',
+    cookies: '/en/cookie-policy/',
   },
 } as const;
 
@@ -96,4 +102,25 @@ export const journalArticles: { name: string; path: string }[] = [
   { name: 'Exam season (EN)', path: routes.en.articleExamSeason },
   { name: 'Running clubs (EN)', path: routes.en.articleRunningClubs },
   { name: 'Fitness for expats (EN)', path: routes.en.articleFitnessExpats },
+];
+
+/** The legal pages linked from the footer, per language. */
+export const legalPages = {
+  ro: [routes.ro.privacy, routes.ro.terms, routes.ro.cookies],
+  en: [routes.en.privacy, routes.en.terms, routes.en.cookies],
+} as const;
+
+/**
+ * Every page that renders the shared V4 header and footer: the critical pages
+ * plus the EN packages booking helper and the six legal pages.
+ */
+export const pagesWithHeader: { name: string; path: string }[] = [
+  ...criticalPages,
+  { name: 'Packages booking (EN)', path: routes.en.packagesBooking },
+  { name: 'Privacy (RO)', path: routes.ro.privacy },
+  { name: 'Terms (RO)', path: routes.ro.terms },
+  { name: 'Cookies (RO)', path: routes.ro.cookies },
+  { name: 'Privacy (EN)', path: routes.en.privacy },
+  { name: 'Terms (EN)', path: routes.en.terms },
+  { name: 'Cookies (EN)', path: routes.en.cookies },
 ];
