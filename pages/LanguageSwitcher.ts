@@ -1,15 +1,15 @@
-import type { Page } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 
 /**
- * The RO/EN switcher in the header. It always targets the translated
- * equivalent of the current page (via Polylang), so its accessible name
- * flips between "Switch to English" and "Switch to Romanian".
+ * The RO/EN switcher in the header ("🇬🇧 EN" / "🇷🇴 RO"). It always targets
+ * the translated equivalent of the current page (via Polylang) and stays
+ * visible next to the booking button on every viewport.
  */
 export class LanguageSwitcher {
   constructor(private readonly page: Page) {}
 
-  private get toggle() {
-    return this.page.locator('.upt-language-switcher a.upt-language-link');
+  get toggle(): Locator {
+    return this.page.locator('a.hd-lang');
   }
 
   async switchLanguage(): Promise<void> {
@@ -20,8 +20,9 @@ export class LanguageSwitcher {
     return this.toggle.getAttribute('href');
   }
 
+  /** The visible label, e.g. "🇬🇧 EN" on Romanian pages. */
   async targetLabel(): Promise<string | null> {
-    return this.toggle.getAttribute('aria-label');
+    return (await this.toggle.textContent())?.trim() ?? null;
   }
 
   async currentLanguageCode(): Promise<string | null> {

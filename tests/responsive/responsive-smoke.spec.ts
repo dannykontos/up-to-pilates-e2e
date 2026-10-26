@@ -11,7 +11,7 @@ test.describe('Responsive smoke', () => {
     await expect(homePage.heading).toBeVisible();
 
     await navigation.openMobileMenuIfCollapsed();
-    await expect(page.locator('nav[aria-label="Mobile navigation"]')).toBeVisible();
+    await expect(page.locator('.hd-menu-item[open] a.hd-mlink').first()).toBeVisible();
 
     await navigation.goTo('contact');
     await expect(page).toHaveURL(/contact-cluj/);
