@@ -31,10 +31,10 @@ test.describe('Mobile layout / no sideways scroll', () => {
 
 test.describe('Mobile layout / header', () => {
   for (const path of [routes.ro.home, routes.en.home]) {
-    test(`menu, booking button and language switch are reachable: ${path}`, async ({ page, homePage, navigation }) => {
+    test(`menu, booking button and language switch are reachable: ${path}`, async ({ homePage, navigation, languageSwitcher }) => {
       await homePage.goto(path);
 
-      const menuToggle = page.getByRole('button', { name: 'Open menu' });
+      const { menuToggle } = navigation;
       await expect(menuToggle).toBeVisible();
       await expect(navigation.bookCta).toBeVisible();
 
@@ -45,8 +45,9 @@ test.describe('Mobile layout / header', () => {
       }
 
       await navigation.openMobileMenuIfCollapsed();
-      expect(await navigation.isLinkVisible('journal'), 'Journal should be in the mobile menu').toBe(true);
-      await expect(page.locator('.upt-language-switcher a.upt-language-link').first()).toBeVisible();
+      // The panel opens with a short transition, so poll instead of checking once.
+      await expect.poll(() => navigation.isLinkVisible('journal'), { message: 'Journal should be in the mobile menu' }).toBe(true);
+      await expect(languageSwitcher.toggle).toBeVisible();
     });
   }
 });
