@@ -2,6 +2,7 @@ export { BasePage } from './BasePage';
 export { HomePage } from './HomePage';
 export { Navigation } from './Navigation';
 export { LanguageSwitcher } from './LanguageSwitcher';
+export { Footer } from './Footer';
 export { BookingPage } from './BookingPage';
 export { PackagesPage } from './PackagesPage';
 export { ContactPage } from './ContactPage';

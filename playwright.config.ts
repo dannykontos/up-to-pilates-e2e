@@ -5,7 +5,7 @@ import { env } from './utils/env';
 const HTTP_ONLY_SPECS = ['**/seo/**', '**/performance/**'];
 
 /** Specs whose result does not depend on the browser engine, so Chromium alone is enough. */
-const CHROMIUM_ONLY_SPECS = ['**/accessibility/**'];
+const CHROMIUM_ONLY_SPECS = ['**/accessibility/**', '**/navigation/header-footer.spec.ts'];
 
 /**
  * See https://playwright.dev/docs/test-configuration.

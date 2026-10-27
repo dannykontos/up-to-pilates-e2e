@@ -31,6 +31,21 @@ export class Navigation {
     return this.page.locator(`:is(a.hd-link, a.hd-mlink):is(${hrefs}):visible`).first();
   }
 
+  /** The sticky `<header>` inside the Elementor header site part. */
+  get header(): Locator {
+    return this.page.locator('header.hd-header');
+  }
+
+  /** The Burn Fitness logo next to ours ("in partnership with" the gym). */
+  get burnLogo(): Locator {
+    return this.page.locator('img.hd-burn');
+  }
+
+  /** All burger panel links, in menu order (the last one is the booking button). */
+  get mobileLinks(): Locator {
+    return this.page.locator('.hd-menu-item a.hd-mlink');
+  }
+
   /** The burger: a `<summary>` inside the header's accordion, labelled "Menu". */
   get menuToggle(): Locator {
     return this.page.locator('summary.hd-menu-h');
