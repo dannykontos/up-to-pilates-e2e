@@ -1,5 +1,5 @@
 import { test, expect } from '../../fixtures/pages.fixture';
-import { routes } from '../../test-data/urls';
+import { packageCatalog, routes } from '../../test-data/urls';
 
 /**
  * Package purchase flow.
@@ -24,6 +24,17 @@ test.describe('Packages', () => {
     }
     expect(names.join(' ')).toMatch(/Reformer/i);
   });
+
+  for (const lang of ['ro', 'en'] as const) {
+    test(`every package is listed with its price: ${lang.toUpperCase()}`, async ({ packagesPage, packagesPageEn }) => {
+      const packages = { ro: packagesPage, en: packagesPageEn }[lang];
+      await packages.open();
+      await packages.waitForPackagesToLoad();
+
+      await expect(packages.packageNames).toHaveText(packageCatalog.map((p) => p.name));
+      await expect(packages.packagePrices).toHaveText(packageCatalog.map((p) => p.price));
+    });
+  }
 
   test('selecting a package advances the booking flow', async ({ packagesPage }) => {
     await packagesPage.open();

@@ -124,3 +124,24 @@ export const pagesWithHeader: { name: string; path: string }[] = [
   { name: 'Terms (EN)', path: routes.en.terms },
   { name: 'Cookies (EN)', path: routes.en.cookies },
 ];
+
+/** The four V4 booking pages, each with Amelia in the right-hand card and an info section below. */
+export const bookingFlowPages: { name: string; path: string; infoHeading: RegExp }[] = [
+  { name: 'Booking (RO)', path: routes.ro.booking, infoHeading: /Ce să știi/ },
+  { name: 'Booking (EN)', path: routes.en.booking, infoHeading: /What to know/ },
+  { name: 'Packages booking (RO)', path: routes.ro.packagesBooking, infoHeading: /De la achiziție/ },
+  { name: 'Packages booking (EN)', path: routes.en.packagesBooking, infoHeading: /From purchase/ },
+];
+
+/**
+ * Every package sold online, in the order Amelia lists it. The names are not
+ * translated in Amelia yet, so the EN page shows the same Romanian names.
+ */
+export const packageCatalog: { name: string; price: string }[] = [
+  { name: 'Pilates + Personal Trainer | 4 + 8', price: 'RON680.00' },
+  { name: 'Pilates + Personal Trainer | 8 + 8', price: 'RON900.00' },
+  { name: 'Pilates Reformer | 3 Ședințe', price: 'RON327.00' },
+  { name: 'Pilates Reformer | 4 Ședințe Private 1:1', price: 'RON750.00' },
+  { name: 'Pilates Reformer | 6 Ședințe', price: 'RON460.00' },
+  { name: 'Pilates Reformer | 8 Ședințe', price: 'RON790.00' },
+];
