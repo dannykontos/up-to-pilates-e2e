@@ -1,20 +1,53 @@
-import type { Page } from '@playwright/test';
+import { expect, type Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { routes } from '../test-data/urls';
+import { ameliaCalendarDay, ameliaTimeSlot } from './amelia';
+
+type PackagesLanguage = 'ro' | 'en';
+
+/** Amelia labels per site language; only the strings the flow relies on. */
+const labels = {
+  ro: {
+    continue: 'Continuă',
+    addAppointment: 'Adăugați mai multe programări',
+    bookLaterNotice: /Numărul de programări necesare pentru rezervare: 0/,
+    allBookedLater: 'Toate programările vor fi selectate ulterior',
+    detailsStep: 'Datele dumneavoastră',
+    fieldError: /Vă rugăm să introduceți/,
+  },
+  en: {
+    continue: 'Continue',
+    addAppointment: 'Add more Appointments',
+    bookLaterNotice: /Number of appointments required for booking: 0/,
+    allBookedLater: 'All appointments will be selected later',
+    detailsStep: 'Your Information',
+    fieldError: /Please enter/,
+  },
+} as const;
 
 /**
- * Package purchase flow (also powered by Amelia). Like BookingPage, this
- * object stops as soon as we have proven a package can be selected and the
- * flow advances - it never reaches the payment step, so no real purchase
- * or reservation is ever created against production.
+ * Package purchase flow (also powered by Amelia), on /rezervari-pachete/ and
+ * /en/packages-booking/.
+ *
+ * Safety boundary: like BookingPage, this object never goes past the
+ * "Datele dumneavoastră" / "Your Information" step. It never fills in
+ * customer details and never opens the payment step, which is where Amelia
+ * starts a Stripe payment intent, so no customer, booking or charge is ever
+ * created against production.
  */
 export class PackagesPage extends BasePage {
-  constructor(page: Page) {
+  private readonly text: (typeof labels)[PackagesLanguage];
+
+  constructor(
+    page: Page,
+    private readonly language: PackagesLanguage = 'ro',
+  ) {
     super(page);
+    this.text = labels[language];
   }
 
   async open(): Promise<void> {
-    await this.goto(routes.ro.packagesBooking);
+    await this.goto(routes[this.language].packagesBooking);
   }
 
   get heading() {
@@ -41,8 +74,28 @@ export class PackagesPage extends BasePage {
     return this.widget.locator('.am-fs__main-heading-inner-title');
   }
 
+  /** "0 appointments required": the package can be bought now and booked later. */
+  get bookLaterNotice() {
+    return this.widget.getByText(this.text.bookLaterNotice);
+  }
+
+  /** Shown on the overview when no session was booked together with the package. */
+  get allBookedLaterNote() {
+    return this.widget.getByText(this.text.allBookedLater);
+  }
+
+  get customerFields() {
+    return this.widget.locator(
+      'input[name="firstName"], input[name="lastName"], input[name="email"], input[name="phone"]',
+    );
+  }
+
+  get fieldErrors() {
+    return this.widget.getByText(this.text.fieldError);
+  }
+
   private get continueButton() {
-    return this.widget.getByRole('button', { name: 'Continuă' });
+    return this.widget.getByRole('button', { name: this.text.continue });
   }
 
   async waitForPackagesToLoad(): Promise<void> {
@@ -54,5 +107,36 @@ export class PackagesPage extends BasePage {
     await this.waitForPackagesToLoad();
     await this.packageItems.first().click();
     await this.continueButton.click();
+  }
+
+  /** Selects a package by its exact Amelia name and advances past the selection step. */
+  async selectPackage(name: string): Promise<void> {
+    await this.waitForPackagesToLoad();
+    await this.packageItems.filter({ has: this.page.getByText(name, { exact: true }) }).click();
+    await this.continueButton.click();
+  }
+
+  async continue(): Promise<void> {
+    await this.continueButton.click();
+  }
+
+  /**
+   * Books the first session together with the package: opens a calendar,
+   * then clicks the first bookable day until its time slots show up (the
+   * first click can land while availability is still loading).
+   */
+  async bookFirstAvailableSession(): Promise<void> {
+    await this.widget.getByRole('button', { name: this.text.addAppointment }).click();
+    const day = this.widget.locator(ameliaCalendarDay).first();
+    const slot = this.widget.locator(ameliaTimeSlot).first();
+    await expect(async () => {
+      await day.click({ timeout: 5000 });
+      await expect(slot).toBeVisible({ timeout: 5000 });
+    }).toPass({ timeout: 45000 });
+    await slot.click();
+  }
+
+  async expectOnDetailsStep(): Promise<void> {
+    await expect(this.currentStepTitle).toHaveText(this.text.detailsStep);
   }
 }

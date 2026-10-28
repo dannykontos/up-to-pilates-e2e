@@ -1,6 +1,7 @@
 import { expect, type Page } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { routes } from '../test-data/urls';
+import { ameliaCalendarDay, ameliaTimeSlot } from './amelia';
 
 type BookingLanguage = 'ro' | 'en';
 
@@ -69,19 +70,12 @@ export class BookingPage extends BasePage {
     return this.widget.getByRole('button', { name: this.text.continue });
   }
 
-  /**
-   * Bookable days from today on. Past days are excluded explicitly: right after
-   * the calendar renders, Amelia briefly shows every cell as enabled until the
-   * availability request returns, so ":not(disabled)" alone can match a past day.
-   */
   private get availableCalendarDays() {
-    return this.widget.locator(
-      '.am-advsc__dayGridMonth-cell:is(.fc-day-today, .fc-day-future):not(.am-advsc__dayGridMonth-disabled)',
-    );
+    return this.widget.locator(ameliaCalendarDay);
   }
 
   private get timeSlots() {
-    return this.widget.locator('.am-advsc__slots-item');
+    return this.widget.locator(ameliaTimeSlot);
   }
 
   /** Labels of the steps shown in the left-hand stepper, in order. */

@@ -5,6 +5,7 @@ export { LanguageSwitcher } from './LanguageSwitcher';
 export { Footer } from './Footer';
 export { BookingPage } from './BookingPage';
 export { PackagesPage } from './PackagesPage';
+export { BookingLayout } from './BookingLayout';
 export { ContactPage } from './ContactPage';
 export { ReformerPage } from './ReformerPage';
 export { JournalPage } from './JournalPage';

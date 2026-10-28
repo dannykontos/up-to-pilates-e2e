@@ -6,6 +6,7 @@ import {
   Footer,
   BookingPage,
   PackagesPage,
+  BookingLayout,
   ContactPage,
   ReformerPage,
   JournalPage,
@@ -20,6 +21,8 @@ type PageFixtures = {
   bookingPage: BookingPage;
   bookingPageEn: BookingPage;
   packagesPage: PackagesPage;
+  packagesPageEn: PackagesPage;
+  bookingLayout: BookingLayout;
   contactPage: ContactPage;
   reformerPage: ReformerPage;
   journalPage: JournalPage;
@@ -52,6 +55,12 @@ export const test = base.extend<PageFixtures>({
   },
   packagesPage: async ({ page }, use) => {
     await use(new PackagesPage(page));
+  },
+  packagesPageEn: async ({ page }, use) => {
+    await use(new PackagesPage(page, 'en'));
+  },
+  bookingLayout: async ({ page }, use) => {
+    await use(new BookingLayout(page));
   },
   contactPage: async ({ page }, use) => {
     await use(new ContactPage(page));
