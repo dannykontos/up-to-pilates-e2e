@@ -12,7 +12,7 @@ test.describe('Google Analytics consent', () => {
       const analytics = cookieBanner.recordAnalyticsRequests();
       await page.goto(path);
       await expect(cookieBanner.acceptButton).toBeVisible();
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('load');
 
       expect(analytics, 'no Google Analytics request before consent').toEqual([]);
       expect(await cookieBanner.analyticsCookies()).toEqual([]);
@@ -26,7 +26,7 @@ test.describe('Google Analytics consent', () => {
     await expect(cookieBanner.root).toBeHidden();
 
     await page.goto(routes.ro.faq);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('load');
 
     expect(analytics).toEqual([]);
     expect(await cookieBanner.analyticsCookies()).toEqual([]);
