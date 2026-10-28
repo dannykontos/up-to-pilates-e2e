@@ -61,11 +61,8 @@ test.describe('Booking flow', () => {
   });
 
   test('English service names contain no Romanian words', async ({ bookingPageEn }) => {
-    // Known issue: Amelia shows the RO service names on /en/book/
-    // (e.g. "Pilates Reformer | 1 Ședință"). When the Amelia translations are
-    // added, this test starts passing and Playwright flags it: remove test.fail().
-    test.fail();
-
+    // Guards the Amelia EN translations: without them /en/book/ falls back to
+    // the RO names (e.g. "Pilates Reformer | 1 Ședință").
     await bookingPageEn.open();
     await bookingPageEn.serviceCombobox.click();
     const names = await bookingPageEn.serviceOptions.allInnerTexts();

@@ -31,7 +31,7 @@ test.describe('Packages', () => {
       await packages.open();
       await packages.waitForPackagesToLoad();
 
-      await expect(packages.packageNames).toHaveText(packageCatalog.map((p) => p.name));
+      await expect(packages.packageNames).toHaveText(packageCatalog.map((p) => p.name[lang]));
       await expect(packages.packagePrices).toHaveText(packageCatalog.map((p) => p.price));
     });
   }

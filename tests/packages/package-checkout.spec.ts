@@ -1,5 +1,6 @@
 import { test, expect } from '../../fixtures/pages.fixture';
 import { recordAmeliaWrites } from '../../utils/amelia';
+import { packageCatalog } from '../../test-data/urls';
 
 /**
  * Buying a package, step by step, up to "Datele dumneavoastră" / "Your
@@ -12,7 +13,7 @@ import { recordAmeliaWrites } from '../../utils/amelia';
  * change in Amelia that starts writing earlier is caught instead of silently
  * creating customers in production.
  */
-const SIX_SESSIONS = 'Pilates Reformer | 6 Ședințe';
+const SIX_SESSIONS = packageCatalog.find((p) => p.price === 'RON460.00')!.name;
 
 test.describe('Packages / checkout up to customer details', () => {
   for (const lang of ['ro', 'en'] as const) {
@@ -21,7 +22,7 @@ test.describe('Packages / checkout up to customer details', () => {
       const writes = recordAmeliaWrites(page);
       await packages.open();
 
-      await packages.selectPackage(SIX_SESSIONS);
+      await packages.selectPackage(SIX_SESSIONS[lang]);
       await expect(packages.widget).toContainText('RON460.00');
       await expect(packages.widget).toContainText('x6');
       await packages.continue();
@@ -50,7 +51,7 @@ test.describe('Packages / checkout up to customer details', () => {
     const writes = recordAmeliaWrites(page);
     await packagesPage.open();
 
-    await packagesPage.selectPackage(SIX_SESSIONS);
+    await packagesPage.selectPackage(SIX_SESSIONS.ro);
     await packagesPage.continue();
     await packagesPage.bookFirstAvailableSession();
     await packagesPage.continue();

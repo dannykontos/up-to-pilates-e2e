@@ -134,14 +134,14 @@ export const bookingFlowPages: { name: string; path: string; infoHeading: RegExp
 ];
 
 /**
- * Every package sold online, in the order Amelia lists it. The names are not
- * translated in Amelia yet, so the EN page shows the same Romanian names.
+ * Every package sold online, in the order Amelia lists it, with the name shown
+ * on the RO and on the EN booking page (Amelia translations, added 28.10).
  */
-export const packageCatalog: { name: string; price: string }[] = [
-  { name: 'Pilates + Personal Trainer | 4 + 8', price: 'RON680.00' },
-  { name: 'Pilates + Personal Trainer | 8 + 8', price: 'RON900.00' },
-  { name: 'Pilates Reformer | 3 Ședințe', price: 'RON327.00' },
-  { name: 'Pilates Reformer | 4 Ședințe Private 1:1', price: 'RON750.00' },
-  { name: 'Pilates Reformer | 6 Ședințe', price: 'RON460.00' },
-  { name: 'Pilates Reformer | 8 Ședințe', price: 'RON790.00' },
+export const packageCatalog: { name: { ro: string; en: string }; price: string }[] = [
+  { name: { ro: 'Pilates + Personal Trainer | 4 + 8', en: 'Pilates + Personal Trainer | 4 + 8' }, price: 'RON680.00' },
+  { name: { ro: 'Pilates + Personal Trainer | 8 + 8', en: 'Pilates + Personal Trainer | 8 + 8' }, price: 'RON900.00' },
+  { name: { ro: 'Pilates Reformer | 3 Ședințe', en: 'Pilates Reformer | 3 Sessions' }, price: 'RON327.00' },
+  { name: { ro: 'Pilates Reformer | 4 Ședințe Private 1:1', en: 'Pilates Reformer | 4 Private 1:1 Sessions' }, price: 'RON750.00' },
+  { name: { ro: 'Pilates Reformer | 6 Ședințe', en: 'Pilates Reformer | 6 Sessions' }, price: 'RON460.00' },
+  { name: { ro: 'Pilates Reformer | 8 Ședințe', en: 'Pilates Reformer | 8 Sessions' }, price: 'RON790.00' },
 ];
