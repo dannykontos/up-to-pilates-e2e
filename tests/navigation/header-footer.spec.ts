@@ -50,11 +50,8 @@ test.describe('Header and footer / every page', () => {
 test.describe('Header and footer / sticky header', () => {
   for (const path of [routes.ro.home, routes.en.home]) {
     test(`header stays pinned to the top while scrolling: ${path}`, async ({ page, navigation, footer }) => {
-      // Known bug (26.10): `position: sticky` sits on header.hd-header, but its
-      // parent (.elementor-location-header) is exactly as tall as the header,
-      // so it has no room to stick and scrolls away. Remove test.fail() once
-      // the sticky rule moves to the wrapper.
-      test.fail();
+      // Sticky must live on the .elementor-location-header wrapper (Site Settings
+      // custom CSS); on header.hd-header alone it has no room to stick.
       await page.goto(path);
 
       await footer.root.scrollIntoViewIfNeeded();
