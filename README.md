@@ -95,6 +95,7 @@ npm run test:seo          # tests/seo only
 npm run test:responsive   # tests/responsive only (mobile projects)
 npm run test:journal      # tests/journal only
 npm run test:faq          # tests/faq only
+npm run test:legal        # tests/legal only (legal pages, Google Analytics consent)
 npm run test:campaigns    # tests/campaigns only (time-bound promotions)
 npm run test:performance  # tests/performance only (page cache, compression)
 npm run test:accessibility # tests/accessibility only (axe-core, WCAG 2.1 AA, Chromium)
@@ -213,6 +214,8 @@ tests/
   journal/                  Journal front page loop, article template and brand punctuation
   faq/                      FAQ accordion: question count, one FAQPage schema in step with the
                             visible questions, a single open/closed icon per question
+  legal/                    Legal pages (date, packages, cookie tools) and Google Analytics
+                            consent: nothing sent to Google before "Acceptă"
   campaigns/                Time-bound promotions (Students Month); browser clock is pinned
                             so date-based behaviour is tested deterministically
   performance/              Page cache never applied to booking pages; gzip compression

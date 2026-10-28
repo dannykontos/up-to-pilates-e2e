@@ -11,6 +11,7 @@ import {
   ReformerPage,
   JournalPage,
   FaqPage,
+  CookieBanner,
 } from '../pages';
 
 type PageFixtures = {
@@ -27,6 +28,7 @@ type PageFixtures = {
   reformerPage: ReformerPage;
   journalPage: JournalPage;
   faqPage: FaqPage;
+  cookieBanner: CookieBanner;
 };
 
 /**
@@ -73,6 +75,9 @@ export const test = base.extend<PageFixtures>({
   },
   faqPage: async ({ page }, use) => {
     await use(new FaqPage(page));
+  },
+  cookieBanner: async ({ page }, use) => {
+    await use(new CookieBanner(page));
   },
 });
 

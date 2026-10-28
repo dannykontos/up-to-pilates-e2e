@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 import { env } from './utils/env';
 
 /** Specs that only use the `request` fixture and never open a browser page. */
-const HTTP_ONLY_SPECS = ['**/seo/**', '**/performance/**'];
+const HTTP_ONLY_SPECS = ['**/seo/**', '**/performance/**', '**/legal/legal-pages.spec.ts'];
 
 /** Specs whose result does not depend on the browser engine, so Chromium alone is enough. */
 const CHROMIUM_ONLY_SPECS = ['**/accessibility/**', '**/navigation/header-footer.spec.ts'];
