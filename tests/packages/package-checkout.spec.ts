@@ -39,7 +39,7 @@ test.describe('Packages / checkout up to customer details', () => {
       await expect(packages.customerFields).toHaveCount(4);
 
       // Continuing with empty fields is stopped in the browser, on the same step.
-      await packages.continue();
+      await packages.pressContinue();
       await expect(packages.fieldErrors.first()).toBeVisible();
       await packages.expectOnDetailsStep();
 
