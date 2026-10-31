@@ -106,17 +106,29 @@ export class PackagesPage extends BasePage {
   async selectFirstPackage(): Promise<void> {
     await this.waitForPackagesToLoad();
     await this.packageItems.first().click();
-    await this.continueButton.click();
+    await this.continue();
   }
 
   /** Selects a package by its exact Amelia name and advances past the selection step. */
   async selectPackage(name: string): Promise<void> {
     await this.waitForPackagesToLoad();
     await this.packageItems.filter({ has: this.page.getByText(name, { exact: true }) }).click();
-    await this.continueButton.click();
+    await this.continue();
   }
 
+  /**
+   * Clicks "Continuă" and waits for the next step to render. Every step reuses
+   * the same button, so a second click sent before the step changes is lost
+   * (seen on WebKit in CI, where Amelia renders more slowly).
+   */
   async continue(): Promise<void> {
+    const stepBefore = await this.currentStepTitle.innerText();
+    await this.continueButton.click();
+    await expect(this.currentStepTitle).not.toHaveText(stepBefore);
+  }
+
+  /** Clicks "Continuă" without expecting to advance, e.g. to trigger field validation. */
+  async pressContinue(): Promise<void> {
     await this.continueButton.click();
   }
 
