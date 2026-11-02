@@ -23,7 +23,6 @@ the next day.
 | Contact        | The form, its required fields and its validation (nothing is sent)                              |       4 | Chrome, Firefox, Safari                |
 | Journal        | Article cards per language, live links, brand punctuation, one title per article                |      18 | Chrome, Firefox, Safari                |
 | FAQ            | All 20 questions per language, one FAQPage schema matching them, one icon per question          |       6 | Chrome, Firefox, Safari                |
-| Campaigns      | Students Month: the header bar shows in October and disappears on 1 November                    |      10 | Chrome, Firefox, Safari                |
 | Mobile         | No page scrolls sideways; menu, Book button and language switch; Journal cards and articles     |      31 | iPhone 14, Pixel 7                     |
 | Accessibility  | No new WCAG 2.1 AA problems on 11 key pages (axe-core)                                          |      11 | Chrome                                 |
 | SEO            | Titles, descriptions, canonicals, hreflang, structured data, sitemap, robots.txt                |      60 | HTTP only                              |
@@ -57,8 +56,6 @@ check a lot while asking little of the server:
 - **The daily E2E run and Lighthouse are 30 minutes apart**, so they never load the host at
   the same time.
 - **Nothing is ever bought, booked or sent.** See [Safety boundaries](#safety-boundaries-production-website).
-- **Time-based behaviour is tested without waiting for the date.** Campaign tests set the
-  browser clock, so "the banner disappears on 1 November" is checked today.
 - **Flaky-by-nature sources are handled on purpose.** Hosts that can't be verified by a
   request (Instagram, Facebook, bot-protected sites) are skipped with a reason, and known
   site-wide accessibility issues are listed explicitly so only new ones fail the build.
@@ -96,7 +93,6 @@ npm run test:responsive   # tests/responsive only (mobile projects)
 npm run test:journal      # tests/journal only
 npm run test:faq          # tests/faq only
 npm run test:legal        # tests/legal only (legal pages, Google Analytics consent)
-npm run test:campaigns    # tests/campaigns only (time-bound promotions)
 npm run test:performance  # tests/performance only (page cache, compression)
 npm run test:accessibility # tests/accessibility only (axe-core, WCAG 2.1 AA, Chromium)
 
@@ -216,8 +212,6 @@ tests/
                             visible questions, a single open/closed icon per question
   legal/                    Legal pages (date, packages, cookie tools) and Google Analytics
                             consent: nothing sent to Google before "Acceptă"
-  campaigns/                Time-bound promotions (Students Month); browser clock is pinned
-                            so date-based behaviour is tested deterministically
   performance/              Page cache never applied to booking pages; gzip compression
   accessibility/            axe-core WCAG 2.1 AA scan of key pages; known site-wide issues
                             are listed in the spec and excluded, anything new fails

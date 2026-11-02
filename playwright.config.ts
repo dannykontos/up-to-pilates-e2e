@@ -42,7 +42,7 @@ export default defineConfig({
   // performance specs only make HTTP requests (no page is rendered), so
   // they run once on the "http" project instead of once per browser. The
   // desktop browser projects cover everything else (smoke, navigation,
-  // booking, packages, contact, journal, campaigns).
+  // booking, packages, contact, journal).
   projects: [
     {
       name: 'http',
